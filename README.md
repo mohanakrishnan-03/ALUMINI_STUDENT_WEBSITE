@@ -1,40 +1,43 @@
-Bridge-Connect
-A platform connecting students with internships, alumni mentors, and career resources.
+#  Bridge-Connect  
+### **Professional Career Development Platform**
 
-Live Website
-https://alumini-student-website.onrender.com
+**Live URL:** [https://alumini-student-website.onrender.com](https://alumini-student-website.onrender.com)
 
-Features
-🤖 AI Career Assistant Chatbot
+---
 
-📄 Resume Analysis Tool
+##  Overview  
+**Bridge-Connect** is an enterprise-grade platform designed to connect **students**, **alumni**, and **companies** on a single ecosystem for career development, mentorship, and recruitment.  
 
-👥 Alumni Connection Platform
+The platform enables students to analyze their resumes using AI, get real-time career guidance, connect with alumni mentors, and apply for internships or jobs — all in one place.
 
-💼 Internship & Job Search
+---
 
-💬 Community Discussion Groups
+##  Features  
 
-Pages
-Home - Main dashboard with all features
+- **AI-Powered Resume Analysis**  
+  Automatically evaluates resumes using the **Google Gemini API** to provide instant insights and suggestions for improvement.
 
-Resume Checker - Analyze your resume
+-  **Career Guidance Chatbot**  
+  An intelligent chatbot offering personalized career advice, industry insights, and interview tips.
 
-Alumni Chat - Connect with alumni
+-  **Alumni Mentorship Network**  
+  Allows students to find and connect with alumni for professional mentorship and networking.
 
-AI Assistant - Get career advice
+-  **Internship & Job Portal**  
+  Browse, apply, and manage internship and job opportunities posted by verified companies.
 
-Tech Used
-HTML, CSS, JavaScript
+-  **Company Recruitment Dashboard**  
+  Enables recruiters to post openings, review candidate profiles, and manage hiring activities efficiently.
 
-Bootstrap for design
+-  **Professional Community Forums**  
+  A dedicated space for discussions, advice sharing, and knowledge exchange among students, alumni, and professionals.
 
-Node.js backend
+---
 
-Google Gemini AI
+##  Technology Stack  
 
-For Students
-Find internships, get resume help, and connect with alumni mentors.
+| Layer | Technologies Used |
+|-------|-------------------|
+| **Frontend** | HTML5, CSS3, JavaScript, Bootstrap 5 |
+| **Backend** | Node.js, Express.js |
 
-For Companies
-Post internships and find talented students.
