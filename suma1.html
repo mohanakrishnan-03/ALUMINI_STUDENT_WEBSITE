@@ -1,0 +1,79 @@
+/* Add this to your existing CSS */
+.resume-portal-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.resume-slogan {
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.resume-subtext {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.resume-portal-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent-color) 0%, #c44512 100%);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(230, 126, 79, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.resume-portal-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(230, 126, 79, 0.4);
+    color: white;
+}
+
+.resume-portal-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+.resume-portal-btn:hover:before {
+    left: 100%;
+}
+
+.resume-portal-btn i {
+    margin-right: 8px;
+    font-size: 1.1em;
+}
+
+/* Responsive adjustments for the resume button */
+@media (max-width: 768px) {
+    .resume-portal-container {
+        padding: 12px;
+    }
+    
+    .resume-portal-btn {
+        padding: 12px 24px;
+        font-size: 0.9rem;
+    }
+    
+    .resume-slogan {
+        font-size: 0.9rem;
+    }
+}

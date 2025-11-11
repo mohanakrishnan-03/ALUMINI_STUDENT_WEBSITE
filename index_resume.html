@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Checker Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #2b2d42;
+            --gray: #6c757d;
+            --border: #dee2e6;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7ec 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .upload-section {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .upload-section h2 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .domain-select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            transition: border 0.3s ease;
+        }
+
+        .domain-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .upload-box {
+            background: white;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .upload-box:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .upload-box.has-file {
+            border-color: var(--success);
+            background: rgba(76, 201, 240, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .upload-subtext {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .file-info {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+            border-left: 4px solid var(--primary);
+            text-align: left;
+            display: none;
+        }
+
+        .file-info i {
+            color: var(--primary);
+            margin-right: 8px;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .analyze-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results-section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .similarity-card {
+            background: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .similarity-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .similarity-card .percentage {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .insights-box {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .insights-box h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .insights-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .insights-box li {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        @media (max-width: 600px) {
+            .download-buttons {
+                flex-direction: column;
+            }
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(114, 9, 183, 0.3);
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c62828;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-file-alt"></i> Resume Checker Pro</h1>
+            <p>AI-powered resume analysis for your target job domain</p>
+        </div>
+
+        <div class="upload-section">
+            <h2><i class="fas fa-cloud-upload-alt"></i> Analyze Your Resume</h2>
+
+            <div class="form-group">
+                <label for="domain-select"><i class="fas fa-briefcase"></i> Select Target Domain</label>
+                <select id="domain-select" class="domain-select">
+                    <option value="">-- Choose a domain --</option>
+                    <option value="software">Software Engineering</option>
+                    <option value="data-science">Data Science & Analytics</option>
+                    <option value="devops">DevOps & Cloud</option>
+                    <option value="frontend">Frontend Development</option>
+                    <option value="backend">Backend Development</option>
+                    <option value="fullstack">Full Stack Development</option>
+                    <option value="mobile">Mobile App Development</option>
+                    <option value="cybersecurity">Cybersecurity</option>
+                </select>
+            </div>
+
+            <div class="upload-box" id="resume-box">
+                <input type="file" id="resume-upload" accept=".pdf,.docx,.txt" hidden>
+                <div class="upload-icon">
+                    <i class="fas fa-file-user"></i>
+                </div>
+                <div class="upload-text">Upload Your Resume</div>
+                <div class="upload-subtext">PDF, DOCX, or TXT files</div>
+                <div class="file-info" id="resume-info">
+                    <i class="fas fa-file"></i> <span id="resume-filename"></span>
+                </div>
+            </div>
+
+            <button id="analyze-btn" class="analyze-btn" disabled>
+                <i class="fas fa-search"></i> Analyze Resume
+            </button>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing your resume...</p>
+            </div>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div class="results-section" id="results">
+            <div class="results-header">
+                <i class="fas fa-chart-line"></i>
+                <h2>Analysis Results</h2>
+            </div>
+            
+            <div class="similarity-card">
+                <h3>Domain Match Score</h3>
+                <div class="percentage" id="similarity-percentage">0%</div>
+            </div>
+
+            <div class="insights-box">
+                <h3><i class="fas fa-lightbulb"></i> Key Insights</h3>
+                <ul id="insights-list"></ul>
+            </div>
+            
+            <div class="download-buttons">
+                <button id="download-txt" class="download-btn">
+                    <i class="fas fa-download"></i> Download Report (TXT)
+                </button>
+                <button id="download-pdf" class="download-btn">
+                    <i class="fas fa-file-pdf"></i> Download Report (PDF)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const resumeUpload = document.getElementById('resume-upload');
+        const resumeBox = document.getElementById('resume-box');
+        const resumeInfo = document.getElementById('resume-info');
+        const resumeFilename = document.getElementById('resume-filename');
+        const domainSelect = document.getElementById('domain-select');
+        const resultsSection = document.getElementById('results');
+        const errorDiv = document.getElementById('error');
+        const insightsList = document.getElementById('insights-list');
+        const downloadTxtBtn = document.getElementById('download-txt');
+        const downloadPdfBtn = document.getElementById('download-pdf');
+        const loadingDiv = document.getElementById('loading');
+        const similarityPercentage = document.getElementById('similarity-percentage');
+
+        // Domain-specific skill sets
+        const domainSkills = {
+            'software': ['python', 'java', 'c++', 'c', 'oop', 'algorithms', 'data structures', 'git', 'agile', 'sql'],
+            'data-science': ['python', 'r', 'sql', 'machine learning', 'deep learning', 'pandas', 'numpy', 'scikit-learn', 'tensorflow', 'pytorch', 'statistics', 'data visualization'],
+            'devops': ['aws', 'azure', 'gcp', 'docker', 'kubernetes', 'jenkins', 'terraform', 'ansible', 'ci/cd', 'linux', 'bash', 'git'],
+            'frontend': ['html', 'css', 'javascript', 'react', 'vue', 'angular', 'typescript', 'redux', 'sass', 'bootstrap', 'responsive design'],
+            'backend': ['node.js', 'express', 'django', 'flask', 'spring', 'java', 'python', 'sql', 'nosql', 'mongodb', 'postgresql', 'rest api'],
+            'fullstack': ['javascript', 'react', 'node.js', 'express', 'mongodb', 'sql', 'html', 'css', 'git', 'rest api', 'docker'],
+            'mobile': ['android', 'ios', 'swift', 'kotlin', 'flutter', 'react native', 'java', 'xcode', 'gradle', 'mobile ui'],
+            'cybersecurity': ['firewall', 'encryption', 'penetration testing', 'siem', 'ids/ips', 'network security', 'linux', 'wireshark', 'nmap', 'risk assessment']
+        };
+
+        // Stopwords
+        const stopWords = new Set([
+            "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has",
+            "he", "in", "is", "it", "its", "of", "on", "that", "the", "to", "was",
+            "were", "will", "with", "i", "me", "my", "myself", "we", "our"
+        ]);
+
+        // File upload handler
+        resumeBox.addEventListener('click', () => resumeUpload.click());
+
+        resumeUpload.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                resumeInfo.style.display = 'block';
+                resumeFilename.textContent = e.target.files[0].name;
+                resumeBox.classList.add('has-file');
+                updateAnalyzeButton();
+            }
+        });
+
+        domainSelect.addEventListener('change', updateAnalyzeButton);
+
+        // Update analyze button
+        function updateAnalyzeButton() {
+            analyzeBtn.disabled = !(resumeUpload.files.length > 0 && domainSelect.value);
+        }
+
+        // Analyze button
+        analyzeBtn.addEventListener('click', async () => {
+            const resumeFile = resumeUpload.files[0];
+            const selectedDomain = domainSelect.value;
+
+            if (!resumeFile || !selectedDomain) {
+                showError('Please upload your resume and select a domain.');
+                return;
+            }
+
+            loadingDiv.style.display = 'block';
+            analyzeBtn.disabled = true;
+            errorDiv.style.display = 'none';
+
+            try {
+                const resumeText = await extractText(resumeFile);
+                const resumeTokens = cleanText(resumeText);
+                const domainRequiredSkills = domainSkills[selectedDomain];
+
+                const resumeSkills = new Set(resumeTokens.filter(w => domainRequiredSkills.includes(w)));
+                const matchedSkills = resumeSkills;
+                const missingSkills = new Set(domainRequiredSkills.filter(skill => !resumeSkills.has(skill)));
+
+                const matchPercent = domainRequiredSkills.length > 0 
+                    ? (matchedSkills.size / domainRequiredSkills.length * 100) 
+                    : 0;
+
+                const report = generateReport(matchPercent, matchedSkills, missingSkills, selectedDomain);
+
+                // Display results
+                resultsSection.style.display = 'block';
+                similarityPercentage.textContent = `${matchPercent.toFixed(1)}%`;
+                insightsList.innerHTML = `
+                    <li><strong>Domain:</strong> ${domainSelect.options[domainSelect.selectedIndex].text}</li>
+                    <li><strong>Matched Skills:</strong> ${matchedSkills.size > 0 ? Array.from(matchedSkills).sort().join(', ') : 'None'}</li>
+                    <li><strong>Missing Skills:</strong> ${missingSkills.size > 0 ? Array.from(missingSkills).sort().join(', ') : 'None'}</li>
+                `;
+
+                // Download handlers
+                downloadTxtBtn.onclick = () => downloadReport(report, 'txt');
+                downloadPdfBtn.onclick = () => downloadReport(report, 'pdf');
+
+            } catch (error) {
+                showError('Error analyzing resume: ' + error.message);
+            } finally {
+                loadingDiv.style.display = 'none';
+                analyzeBtn.disabled = false;
+            }
+        });
+
+        // Text extraction
+        async function extractText(file) {
+            if (file.name.endsWith('.pdf')) {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                let text = '';
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    text += content.items.map(item => item.str).join(' ') + '\n';
+                }
+                return text;
+            } else if (file.name.endsWith('.txt')) {
+                return await file.text();
+            } else if (file.name.endsWith('.docx')) {
+                showError('DOCX not supported. Please convert to PDF or TXT.');
+                return '';
+            }
+            return '';
+        }
+
+        // Clean text
+        function cleanText(text) {
+            text = text.toLowerCase();
+            text = text.replace(/[^a-z0-9+]/g, ' ');
+            return text.split(/\s+/).filter(w => w.length > 2 && !stopWords.has(w));
+        }
+
+        // Generate report
+        function generateReport(matchPercent, matched, missing, domain) {
+            const domainName = domainSelect.options[domainSelect.selectedIndex].text;
+            return [
+                'Resume Checker Pro - Domain Match Report',
+                '================================================',
+                `Domain: ${domainName}`,
+                `Match Score: ${matchPercent.toFixed(1)}%`,
+                '',
+                `Matched Skills (${matched.size}):`,
+                matched.size > 0 ? '  • ' + Array.from(matched).sort().join('\n  • ') : '  None',
+                '',
+                `Missing Key Skills (${missing.size}):`,
+                missing.size > 0 ? '  • ' + Array.from(missing).sort().join('\n  • ') : '  None',
+                '',
+                'Tip: Add missing skills to strengthen your profile!'
+            ].join('\n');
+        }
+
+        // Download report
+        function downloadReport(report, format) {
+            if (format === 'txt') {
+                const blob = new Blob([report], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'resume_domain_report.txt';
+                a.click();
+                URL.revokeObjectURL(url);
+            } else if (format === 'pdf') {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                let y = 20;
+                report.split('\n').forEach(line => {
+                    doc.text(line, 15, y);
+                    y += 7;
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                });
+                doc.save('resume_domain_report.pdf');
+            }
+        }
+
+        // Show error
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            resultsSection.style.display = 'none';
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPDF/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>

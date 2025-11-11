@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Chat UI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f5e8d7;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 1000px;
+      height: 90vh;
+      display: flex;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    .chat-list {
+      width: 30%;
+      background: #d2b48c;
+      border-right: 1px solid #c0a070;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-list h3 {
+      padding: 15px;
+      background: #8b7d6b;
+      color: #fff;
+      text-align: center;
+    }
+
+    .chat-list ul {
+      list-style: none;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .chat-list li {
+      padding: 15px;
+      cursor: pointer;
+      border-bottom: 1px solid #c0a070;
+      transition: background 0.2s;
+    }
+
+    .chat-list li:hover {
+      background: #c9a87a;
+    }
+
+    .chat-list li.active {
+      background: #a07d54;
+      color: #fff;
+    }
+
+    /* Chat Window */
+    .chat-window {
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-window-header {
+      padding: 15px;
+      background: #8b7d6b;
+      color: #fff;
+    }
+
+    .chat-window-messages {
+      flex: 1;
+      padding: 20px;
+      background: #e8e0d5;
+      overflow-y: auto;
+    }
+
+    .message {
+      max-width: 60%;
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      position: relative;
+      word-wrap: break-word;
+    }
+
+    .message.sent { 
+      background: #d2b48c; 
+      margin-left: auto; 
+    }
+
+    .message.received { background: #fff; }
+
+    .message-time {
+      font-size: 10px;
+      color: #7a6d5a;
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+    }
+
+    .chat-window-input {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: #f0e8e0;
+    }
+
+    .chat-window-input input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      outline: none;
+      color: #5a4e3f;
+    }
+
+    .chat-window-input button {
+      padding: 10px;
+      background: #8b7d6b;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .chat-window-input input[type="file"] {
+      display: none;
+    }
+
+    .upload-label {
+      background: #8b7d6b;
+      color: #fff;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .message img {
+      max-width: 200px;
+      border-radius: 8px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <!-- Chat List -->
+    <div class="chat-list">
+      <h3>Chats</h3>
+      <ul>
+        <li class="active" onclick="loadChat('John Doe')">John Doe</li>
+        <li onclick="loadChat('Alice')">Alice</li>
+        <li onclick="loadChat('Bob')">Bob</li>
+        <li onclick="loadChat('Charlie')">Charlie</li>
+        <li onclick="loadChat('Diana')">Diana</li>
+        <li onclick="loadChat('Ethan')">Ethan</li>
+        <li onclick="loadChat('Fiona')">Fiona</li>
+      </ul>
+    </div>
+
+    <!-- Chat Window -->
+    <div class="chat-window">
+      <div class="chat-window-header" id="chatHeader">John Doe</div>
+      <div class="chat-window-messages" id="chatMessages"></div>
+      <div class="chat-window-input">
+        <label for="fileInput" class="upload-label">📎</label>
+        <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt"/>
+        <input type="text" id="messageInput" placeholder="Type a message..."/>
+        <button id="sendBtn">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sendBtn = document.getElementById("sendBtn");
+    const messageInput = document.getElementById("messageInput");
+    const chatMessages = document.getElementById("chatMessages");
+    const fileInput = document.getElementById("fileInput");
+    const chatHeader = document.getElementById("chatHeader");
+    const chatListItems = document.querySelectorAll(".chat-list li");
+
+    // Store chats for each user
+    const chats = {
+      "John Doe": [
+        { type: "received", text: "Hey, how's it going?" }
+      ],
+      "Alice": [
+        { type: "received", text: "Hi! Long time no see." }
+      ],
+      "Bob": [
+        { type: "received", text: "Are we meeting tomorrow?" }
+      ],
+      "Charlie": [
+        { type: "received", text: "Game night tonight?" }
+      ],
+      "Diana": [
+        { type: "received", text: "Please check your email." }
+      ],
+      "Ethan": [
+        { type: "received", text: "Project update?" }
+      ],
+      "Fiona": [
+        { type: "received", text: "Happy Birthday 🎉" }
+      ],
+    };
+
+    let currentChat = "John Doe";
+
+    const getTime = () =>
+      new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+    function createMessage(content, type = "sent", isHTML = false) {
+      const messageDiv = document.createElement("div");
+      messageDiv.className = `message ${type}`;
+      
+      if (isHTML) {
+        messageDiv.innerHTML = content;
+      } else {
+        messageDiv.textContent = content;
+      }
+
+      const timeSpan = document.createElement("span");
+      timeSpan.className = "message-time";
+      timeSpan.textContent = getTime();
+
+      messageDiv.appendChild(timeSpan);
+      return messageDiv;
+    }
+
+    function loadChat(user) {
+      currentChat = user;
+      chatHeader.textContent = user;
+      chatMessages.innerHTML = "";
+
+      // Update active class
+      chatListItems.forEach(item => item.classList.remove("active"));
+      [...chatListItems].find(item => item.textContent === user).classList.add("active");
+
+      // Load messages
+      chats[user].forEach(msg => {
+        chatMessages.appendChild(createMessage(msg.text, msg.type));
+      });
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function sendMessage() {
+      const text = messageInput.value.trim();
+      if (!text) return;
+
+      chats[currentChat].push({ type: "sent", text });
+      chatMessages.appendChild(createMessage(text, "sent"));
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      messageInput.value = "";
+    }
+
+    function sendFile(file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        let content;
+        if (file.type.startsWith("image/")) {
+          content = `<img src="${e.target.result}" alt="Uploaded Image"/>`;
+        } else {
+          content = `<a href="${e.target.result}" download="${file.name}">${file.name}</a>`;
+        }
+        chats[currentChat].push({ type: "sent", text: content, isHTML: true });
+        chatMessages.appendChild(createMessage(content, "sent", true));
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    sendBtn.addEventListener("click", sendMessage);
+    messageInput.addEventListener("keypress", e => {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files.length > 0) {
+        sendFile(fileInput.files[0]);
+        fileInput.value = ""; // reset so same file can be uploaded again
+      }
+    });
+
+    // Load default chat
+    loadChat(currentChat);
+  </script>
+</body>
+</html>

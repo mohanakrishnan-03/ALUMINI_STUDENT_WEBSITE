@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #8b6f47;
+            --secondary-color: #d4b8a8;
+            --accent-color: #e67e4f;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f8f8f8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            background-color: #d4d4d4;
+            padding: 15px 25px;
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            color: var(--accent-color);
+        }
+
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--secondary-color);
+            transform: translateX(5px);
+        }
+
+        .login-btn {
+            background-color: var(--secondary-color);
+            color: var(--text-dark);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            padding: 5rem 0;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            line-height: 1.2;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 span {
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 50px;
+            padding: 0.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 500px;
+            transition: all 0.3s ease;
+        }
+
+        .search-container:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            width: 100%;
+            border-radius: 50px;
+        }
+
+        .search-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: #6b4e32;
+            transform: scale(1.05);
+        }
+
+        .check-resume-btn {
+            background: linear-gradient(135deg, #5b4b3a, #d4a373);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+            transition: all 0.3s ease;
+        }
+
+        .check-resume-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #6a5a49, #e4b383);
+        }
+
+        /* Connect Section */
+        .connect-section {
+            background-color: var(--bg-light);
+            padding: 4rem 0;
+        }
+
+        .connect-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            height: 100%;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .connect-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .connect-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--text-dark);
+            margin-right: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .connect-card:hover .connect-icon {
+            transform: scale(1.1);
+            background-color: var(--primary-color);
+        }
+
+        .connect-content h3 {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .connect-card:hover .connect-content h3 {
+            color: var(--primary-color);
+        }
+
+        .connect-content p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .connect-arrow {
+            margin-left: auto;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .connect-card:hover .connect-arrow {
+            transform: translateX(10px);
+            color: var(--primary-color);
+        }
+
+        /* Community Section */
+        .community-section {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .community-card {
+            background: linear-gradient(135deg, #4a3c28 0%, #6b4e32 50%, var(--primary-color) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .community-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .community-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            transition: transform 0.3s ease;
+        }
+
+        .community-card:hover h3 {
+            transform: translateY(-5px);
+        }
+
+        .community-dots {
+            margin: 1rem 0;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            opacity: 0.7;
+        }
+
+        .community-icon {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .community-card:hover .community-icon {
+            transform: scale(1.2) rotate(10deg);
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .testimonials h2 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 4rem;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+
+        .testimonial-card {
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            height: 100%;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 1.5rem;
+            font-size: 3rem;
+            color: #ccc;
+            font-family: serif;
+            transition: color 0.3s ease;
+        }
+
+        .testimonial-card:hover::before {
+            color: var(--primary-color);
+        }
+
+        .testimonial-text {
+            color: var(--text-dark);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            padding-top: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .testimonial-card:hover .testimonial-text {
+            color: var(--text-dark);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover .author-avatar {
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bg-light);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer h5 {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer p, .footer a {
+            color: var(--text-light);
+            line-height: 1.8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--text-dark);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #ddd;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 3rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+                text-align: center;
+            }
+            
+            .testimonials, .community-section {
+                padding: 3rem 0;
+            }
+            
+            .connect-section {
+                padding: 3rem 0;
+            }
+            
+            .connect-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .connect-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .connect-arrow {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Bridge-Connect</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="candidatesDropdown" role="button" data-bs-toggle="dropdown">
+                            Candidates
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person-plus"></i>Register</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-person"></i>Create Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-search"></i>Browse Internships</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-heart"></i>Saved Positions</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-graph-up"></i>Application Status</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="companiesDropdown" role="button" data-bs-toggle="dropdown">
+                            Companies
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-building"></i>Company Registration</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-plus-circle"></i>Post Internships</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-people"></i>Manage Applications</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-bar-chart"></i>Analytics Dashboard</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-award"></i>Premium Plans</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="blogsDropdown" role="button" data-bs-toggle="dropdown">
+                            Blogs
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-lightbulb"></i>Career Tips</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-briefcase"></i>Industry Insights</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-mortarboard"></i>Student Success Stories</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-chat-dots"></i>Interview Guides</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-trending-up"></i>Market Trends</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="jobsDropdown" role="button" data-bs-toggle="dropdown">
+                            Find Jobs
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-clock"></i>Full-time Positions</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-hourglass-split"></i>Part-time Jobs</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-house"></i>Remote Work</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-geo-alt"></i>Location-based</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-star"></i>Featured Jobs</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact Us</a>
+                    </li>
+                </ul>
+                
+                <a href="#" class="login-btn" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    <i class="bi bi-person-circle"></i> Login/Signup
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1>Tired of struggling<br>to find internships?<br><span>Let us help you.</span></h1>
+                    <div class="search-container d-flex">
+                        <input type="text" class="search-input" placeholder="Data Science" />
+                        <button class="search-btn">Search</button>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 text-center">
+                    <h1 style="font-size:42px; font-weight:800; color:#fffdfd; text-transform:uppercase; letter-spacing:2px; margin-bottom:40px;">
+                        Check Your Resume Status Instantly 
+                    </h1>
+                    <a href="index_resume.html">
+                        <button class="check-resume-btn">
+                            CHECK RESUME 
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Connect Section -->
+    <section class="connect-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="connect-card" onclick="window.location.href='index_chat.html'">
+                        <div class="connect-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="connect-content">
+                            <h3>Connect With Alumni</h3>
+                            <p>Find your alumni community and start a discussion</p>
+                        </div>
+                        <div class="connect-arrow">
+                            <i class="bi bi-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="connect-card" onclick="window.location.href='index_chatbot.html'">
+                        <div class="connect-icon">
+                            <i class="bi bi-question-circle"></i>
+                        </div>
+                        <div class="connect-content">
+                            <h3>Ask your doubts</h3>
+                            <p>Ask your questions to our chatbot to have a clear mind</p>
+                        </div>
+                        <div class="connect-arrow">
+                            <i class="bi bi-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section class="community-section">
+        <div class="container">
+            <h2>Community Chats</h2>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="community-card" onclick="openCommunity('DataScience')">
+                        <div class="community-icon">
+                            <i class="bi bi-chat-left-text"></i>
+                        </div>
+                        <h3>DATA SCIENCE</h3>
+                        <div class="community-dots">• • • • • • • • • •</div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="community-card" onclick="openCommunity('UIUXDesign')">
+                        <div class="community-icon">
+                            <i class="bi bi-brush"></i>
+                        </div>
+                        <h3>UI/UX DESIGN</h3>
+                        <div class="community-dots">• • • • • • • • • •</div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="community-card" onclick="openCommunity('DataStructure')">
+                        <div class="community-icon">
+                            <i class="bi bi-code"></i>
+                        </div>
+                        <h3>DATA STRUCTURE ALGORITHMS</h3>
+                        <div class="community-dots">• • • • • • • • • •</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2>Don't just take our word for it — hear<br>from our users.</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            This portal made my internship search effortless. I found the perfect opportunity within days! – Sarah K
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">SK</div>
+                            <div class="author-name">Sarah K</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            The Alumni-Student Bridge helped me connect with experienced mentors who guided my career decisions. – James M
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">JM</div>
+                            <div class="author-name">James M</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">
+                            Tracking my internship progress was seamless! – Anita D
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">AD</div>
+                            <div class="author-name">Anita D</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login to Your Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="loginEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create an Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="signupForm">
+                        <div class="mb-3">
+                            <label for="signupName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="signupName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="signupEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="signupPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">I am a:</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="userType" id="studentType" value="student" checked>
+                                    <label class="form-check-label" for="studentType">Student</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="userType" id="employerType" value="employer">
+                                    <label class="form-check-label" for="employerType">Employer</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <h5>ABOUT US</h5>
+                    <p>Connecting students, alumni, and companies for seamless internship experiences</p>
+                    <h5 class="mt-4">QUICK LINK</h5>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Internships</a></li>
+                        <li><a href="#">Alumni-Student Bridge</a></li>
+                        <li><a href="#">Reports</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5>SUPPORT</h5>
+                    <ul>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5>CONTACT US</h5>
+                    <div class="contact-info">
+                        <p><i class="bi bi-envelope"></i> Email Us: support@internportal.com</p>
+                        <p><i class="bi bi-telephone"></i> Phone: +1 (123) 456-7890</p>
+                    </div>
+                    <h5>SOCIAL MEDIA</h5>
+                    <div class="social-links">
+                        <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="social-icon"><i class="bi bi-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>COPYRIGHT © 2025 Internship Portal. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle between login and signup modals
+        document.getElementById('showSignup').addEventListener('click', (e) => {
+            e.preventDefault();
+            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+            new bootstrap.Modal(document.getElementById('signupModal')).show();
+        });
+
+        document.getElementById('showLogin').addEventListener('click', (e) => {
+            e.preventDefault();
+            bootstrap.Modal.getInstance(document.getElementById('signupModal')).hide();
+            new bootstrap.Modal(document.getElementById('loginModal')).show();
+        });
+
+        // Community Chat Handler
+        function openCommunity(community) {
+            if (community === 'DataScience') {
+                window.location.href = 'inde_community.html';
+            } else if (community === 'UIUXDesign') {
+                window.location.href = 'UX.html';
+            } else if (community === 'DataStructure') {
+                window.location.href = 'data.html';
+            }
+        }
+    </script>
+</body>
+</html>

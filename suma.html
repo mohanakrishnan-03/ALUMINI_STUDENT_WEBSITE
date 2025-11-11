@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Matcher Pro - AI Skill Analysis</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #7209b7;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --text-dark: #2b2d42;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+            --gradient-primary: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            --gradient-accent: linear-gradient(135deg, #7209b7 0%, #f72585 100%);
+            --gradient-success: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            line-height: 1.6;
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: white !important;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            background: var(--gradient-primary);
+            padding: 12px 20px;
+            color: white !important;
+            font-weight: 700;
+            font-size: 1.3rem;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+
+        .nav-link {
+            color: var(--text-dark) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            margin: 0 0.3rem;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .login-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            color: white;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Header Section */
+        .header-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .header-title {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header-subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .upload-card {
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .upload-card:hover {
+            border-color: var(--primary-color);
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .upload-card.has-file {
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-subtext {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .file-info {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 4px solid var(--primary-color);
+            display: none;
+        }
+
+        /* Button Styles */
+        .btn-primary-custom {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .check-btn {
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(114, 9, 183, 0.3);
+        }
+
+        .check-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .results-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .match-score {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .skills-container {
+            margin-bottom: 2rem;
+        }
+
+        .skill-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-category h4 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-category h4 i {
+            margin-right: 0.5rem;
+        }
+
+        .skill-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .matched-skill {
+            background: rgba(40, 167, 69, 0.15);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .missing-skill {
+            background: rgba(220, 53, 69, 0.15);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .key-skill {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .progress {
+            height: 25px;
+            border-radius: 12px;
+            margin: 1rem 0;
+            background-color: #e9ecef;
+        }
+
+        .progress-bar {
+            background: var(--gradient-success);
+            border-radius: 12px;
+            transition: width 1s ease-in-out;
+        }
+
+        /* Alert Styles */
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+            min-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: none;
+            animation: slideInAlert 0.5s ease-out;
+        }
+
+        .custom-alert.alert-success {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            color: var(--text-dark);
+        }
+
+        .custom-alert.alert-danger {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            color: var(--text-dark);
+        }
+
+        .alert-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .alert-body {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: var(--text-light);
+        }
+
+        @keyframes slideInAlert {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .fade-out-alert {
+            animation: fadeOutAlert 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeOutAlert {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header-section {
+                padding: 1.5rem;
+            }
+            
+            .upload-section {
+                padding: 1.5rem;
+            }
+            
+            .upload-card {
+                padding: 1.5rem;
+            }
+            
+            .score-circle {
+                width: 100px;
+                height: 100px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">ResumeMatcher</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+                <a href="#" class="login-btn">
+                    <i class="bi bi-person-circle me-1"></i> Login
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <h1 class="header-title">AI-Powered Resume Matcher</h1>
+            <p class="header-subtitle">Upload your resume and a job description to see how well you match with the position</p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="upload-card" id="resumeUploadCard">
+                        <input type="file" id="resumeFile" accept=".pdf,.doc,.docx,.txt" style="display:none;" />
+                        <div class="upload-icon">
+                            <i class="bi bi-file-earmark-person"></i>
+                        </div>
+                        <div class="upload-text">Upload Your Resume</div>
+                        <div class="upload-subtext">PDF, DOC, DOCX, or TXT files</div>
+                        <div class="file-info" id="resumeInfo">
+                            <i class="bi bi-file-text"></i> <span id="resumeFileName"></span> (<span id="resumeFileSize"></span>)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="upload-card" id="jdUploadCard">
+                        <input type="file" id="jdFile" accept=".pdf,.doc,.docx,.txt" style="display:none;" />
+                        <div class="upload-icon">
+                            <i class="bi bi-file-text"></i>
+                        </div>
+                        <div class="upload-text">Upload Job Description</div>
+                        <div class="upload-subtext">PDF, DOC, DOCX, or TXT files</div>
+                        <div class="file-info" id="jdInfo">
+                            <i class="bi bi-file-text"></i> <span id="jdFileName"></span> (<span id="jdFileSize"></span>)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="check-btn" id="checkBtn" disabled>
+                <i class="bi bi-search me-2"></i> Analyze Match
+            </button>
+            
+            <div class="progress mt-3" id="progressBar" style="display: none;">
+                <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <div class="results-card">
+                <div class="match-score">
+                    <div class="score-circle" id="matchScore">0%</div>
+                    <h3>Skill Match Score</h3>
+                    <p>Your resume matches with the job description</p>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="skill-category">
+                            <h4><i class="bi bi-check-circle-fill text-success"></i> Matched Skills</h4>
+                            <div class="skill-badges" id="matchedSkills">
+                                <!-- Filled by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="skill-category">
+                            <h4><i class="bi bi-x-circle-fill text-danger"></i> Missing Skills</h4>
+                            <div class="skill-badges" id="missingSkills">
+                                <!-- Filled by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h4><i class="bi bi-star-fill text-warning"></i> Key Skills in Job Description</h4>
+                    <div class="skill-badges" id="keySkills">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div class="alert alert-success alert-dismissible custom-alert" role="alert" style="display: none;">
+        <div class="alert-header">
+            <i class="bi bi-check-circle-fill"></i>
+            <span class="alert-title">Success</span>
+        </div>
+        <div class="alert-body">
+            Operation completed successfully.
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global variables
+        let uploadedResume = null;
+        let uploadedJD = null;
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Show alert function
+        function showAlert(message, type) {
+            const alertDiv = document.querySelector('.custom-alert');
+            alertDiv.className = `alert alert-dismissible custom-alert alert-${type}`;
+            alertDiv.style.display = 'block';
+            alertDiv.querySelector('.alert-title').textContent = type === 'success' ? 'Success' : 'Error';
+            alertDiv.querySelector('.alert-body').textContent = message;
+
+            setTimeout(() => {
+                alertDiv.classList.add('fade-out-alert');
+                setTimeout(() => {
+                    alertDiv.style.display = 'none';
+                    alertDiv.classList.remove('fade-out-alert');
+                }, 300);
+            }, 3000);
+        }
+
+        // Update check button state
+        function updateCheckButton() {
+            const checkBtn = document.getElementById('checkBtn');
+            checkBtn.disabled = !(uploadedResume && uploadedJD);
+        }
+
+        // Resume file selection handler
+        document.getElementById('resumeUploadCard').addEventListener('click', () => {
+            document.getElementById('resumeFile').click();
+        });
+
+        document.getElementById('resumeFile').addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                uploadedResume = e.target.files[0];
+                const resumeInfo = document.getElementById('resumeInfo');
+                const resumeUploadCard = document.getElementById('resumeUploadCard');
+                
+                resumeInfo.style.display = 'block';
+                resumeInfo.querySelector('#resumeFileName').textContent = uploadedResume.name;
+                resumeInfo.querySelector('#resumeFileSize').textContent = formatFileSize(uploadedResume.size);
+                
+                resumeUploadCard.classList.add('has-file');
+                showAlert(`Resume "${uploadedResume.name}" selected.`, 'success');
+                updateCheckButton();
+            }
+        });
+
+        // JD file selection handler
+        document.getElementById('jdUploadCard').addEventListener('click', () => {
+            document.getElementById('jdFile').click();
+        });
+
+        document.getElementById('jdFile').addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                uploadedJD = e.target.files[0];
+                const jdInfo = document.getElementById('jdInfo');
+                const jdUploadCard = document.getElementById('jdUploadCard');
+                
+                jdInfo.style.display = 'block';
+                jdInfo.querySelector('#jdFileName').textContent = uploadedJD.name;
+                jdInfo.querySelector('#jdFileSize').textContent = formatFileSize(uploadedJD.size);
+                
+                jdUploadCard.classList.add('has-file');
+                showAlert(`Job Description "${uploadedJD.name}" selected.`, 'success');
+                updateCheckButton();
+            }
+        });
+
+        // Check button handler
+        document.getElementById('checkBtn').addEventListener('click', async () => {
+            if (!uploadedResume || !uploadedJD) {
+                showAlert("Please upload both Resume and Job Description.", "danger");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("resume", uploadedResume);
+            formData.append("jd", uploadedJD);
+
+            // Show progress bar
+            const progressBar = document.getElementById('progressBar');
+            const progressBarInner = document.querySelector('.progress-bar');
+            progressBar.style.display = 'block';
+            
+            // Animate progress bar
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 5;
+                progressBarInner.style.width = `${progress}%`;
+                if (progress >= 90) clearInterval(progressInterval);
+            }, 200);
+
+            try {
+                const res = await fetch("http://127.0.0.1:5000/api/check", {
+                    method: "POST",
+                    body: formData
+                });
+
+                // Complete progress bar
+                clearInterval(progressInterval);
+                progressBarInner.style.width = '100%';
+
+                if (!res.ok) {
+                    throw new Error(`Server returned ${res.status}: ${res.statusText}`);
+                }
+
+                const data = await res.json();
+                
+                // Hide progress bar after a short delay
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                }, 500);
+
+                // Display results
+                const resultsSection = document.getElementById("resultsSection");
+                resultsSection.style.display = "block";
+                
+                // Update match score
+                document.getElementById('matchScore').textContent = `${data.match_percentage}%`;
+                
+                // Update matched skills
+                const matchedSkillsContainer = document.getElementById('matchedSkills');
+                matchedSkillsContainer.innerHTML = '';
+                if (data.matched_skills && data.matched_skills.length > 0) {
+                    data.matched_skills.forEach(skill => {
+                        const badge = document.createElement('span');
+                        badge.className = 'skill-badge matched-skill';
+                        badge.textContent = skill;
+                        matchedSkillsContainer.appendChild(badge);
+                    });
+                } else {
+                    matchedSkillsContainer.innerHTML = '<p class="text-muted">No skills matched</p>';
+                }
+                
+                // Update missing skills
+                const missingSkillsContainer = document.getElementById('missingSkills');
+                missingSkillsContainer.innerHTML = '';
+                if (data.missing_skills && data.missing_skills.length > 0) {
+                    data.missing_skills.forEach(skill => {
+                        const badge = document.createElement('span');
+                        badge.className = 'skill-badge missing-skill';
+                        badge.textContent = skill;
+                        missingSkillsContainer.appendChild(badge);
+                    });
+                } else {
+                    missingSkillsContainer.innerHTML = '<p class="text-muted">No missing skills - perfect match!</p>';
+                }
+                
+                // Update key skills
+                const keySkillsContainer = document.getElementById('keySkills');
+                keySkillsContainer.innerHTML = '';
+                if (data.top_jd_skills && data.top_jd_skills.length > 0) {
+                    data.top_jd_skills.forEach(skill => {
+                        const badge = document.createElement('span');
+                        badge.className = 'skill-badge key-skill';
+                        badge.textContent = skill;
+                        keySkillsContainer.appendChild(badge);
+                    });
+                }
+                
+                showAlert("Analysis complete! See your results below.", "success");
+            } catch (error) {
+                console.error("Error checking resume:", error);
+                progressBar.style.display = 'none';
+                showAlert("Error analyzing documents. Make sure the backend server is running.", "danger");
+            }
+        });
+
+        // Health check on page load
+        window.addEventListener('load', async () => {
+            try {
+                const res = await fetch("http://127.0.0.1:5000/api/health");
+                if (res.ok) {
+                    console.log("Backend server is connected");
+                }
+            } catch (error) {
+                console.warn("Backend server is not available");
+            }
+        });
+    </script>
+</body>
+</html>
