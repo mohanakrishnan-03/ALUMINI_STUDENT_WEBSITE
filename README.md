@@ -4,6 +4,10 @@
 **Live URL:** [https://alumini-student-website.onrender.com](https://alumini-student-website.onrender.com)
 
 ---
+From: 28th May
+To: 27th June
+
+Level: Advanced
 
 ##  Overview  
 **Bridge-Connect** is an enterprise-grade platform designed to connect **students**, **alumni**, and **companies** on a single ecosystem for career development, mentorship, and recruitment.  
